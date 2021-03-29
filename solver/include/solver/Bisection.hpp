@@ -8,12 +8,9 @@ double bisection(double target, double lower, double upper, double tol, T f) {
     double y = f(sol);
     
     while ((std::fabs(y - target) > tol)) {
-        if (y < target)
-        {
+        if (y < target) {
             lower = sol;
-        }
-        else
-        {
+        } else {
             upper = sol;
         }
         sol = 0.5 * (lower + upper);
