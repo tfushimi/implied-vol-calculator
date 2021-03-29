@@ -34,4 +34,7 @@
 # build files
 build/*
 
+# vs code
+.vscode/*
+
 .DS_Store

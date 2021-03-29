@@ -1,8 +1,8 @@
 #include <iostream>
-#include "NewtonRaphson.hpp"
-#include "BSCallClass.hpp"
-#include "BlackScholesFormula.hpp"
-#include "Bisection.hpp"
+#include "solver/NewtonRaphson.hpp"
+#include "solver/Bisection.hpp"
+#include "bsmodel/BSCallClass.hpp"
+#include "bsmodel/BlackScholesFormula.hpp"
 
 using namespace std;
 

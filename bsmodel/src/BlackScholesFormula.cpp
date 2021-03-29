@@ -1,4 +1,4 @@
-#include "BlackScholesFormula.hpp"
+#include "bsmodel/BlackScholesFormula.hpp"
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
 
