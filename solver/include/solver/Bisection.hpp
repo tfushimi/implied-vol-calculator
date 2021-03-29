@@ -1,26 +1,25 @@
-#ifndef Bisection_hpp
-#define Bisection_hpp
+#ifndef bisection_hpp
+#define bisection_hpp
 #include <cmath>
 
 template<typename T>
-double Bisection(double Target, double Low, double High, double Tolerance, T TheFunction)
-{
-    double x = 0.5 * (Low + High);
-    double y = TheFunction(x);
+double bisection(double target, double lower, double upper, double tol, T f) {
+    double sol = 0.5 * (lower + upper);
+    double y = f(sol);
     
-    do {
-        if (y < Target)
+    while ((std::fabs(y - target) > tol)) {
+        if (y < target)
         {
-            Low = x;
+            lower = sol;
         }
         else
         {
-            High = x;
+            upper = sol;
         }
-        x = 0.5 * (Low + High);
-        y = TheFunction(x);
-    } while ((std::fabs(y - Target) > Tolerance));
-    return x;
+        sol = 0.5 * (lower + upper);
+        y = f(sol);
+    } ;
+    return sol;
 }
 
-#endif /* Bisection_hpp */
+#endif

@@ -1,64 +1,45 @@
 #include <iostream>
-#include "solver/NewtonRaphson.hpp"
-#include "solver/Bisection.hpp"
-#include "bsmodel/BSCallClass.hpp"
-#include "bsmodel/BlackScholesFormula.hpp"
+#include "solver/newton.hpp"
+#include "bsmodel/formulas.hpp"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    // Black Schole model
-    cout << BlackScholesCall(60, 65, 0.08, 0, 0.3, 0.25) << endl;
-    cout << BlackScholesPut(60, 65, 0.08, 0, 0.3, 0.25) << endl;
-    
     // variables
-    double Expiry, Strike, Spot, r, d, Price;
+    double expiration, strike, spot, r, d, price;
 
-    cout << "Enter expiry: ";
-    cin >> Expiry;
+    cout << "Enter expiration: ";
+    cin >> expiration;
     cout << "Enter strike: ";
-    cin >> Strike;
+    cin >> strike;
     cout << "Enter spot: ";
-    cin >> Spot;
+    cin >> spot;
     cout << "Enter r: ";
     cin >> r;
     cout << "Enter d: ";
     cin >> d;
     cout << "Enter price: ";
-    cin >> Price;
-    
-    // initial low and high guess
-    double Low, High;
-    cout << "Enter lower guess: ";
-    cin >> Low;
-    cout << "Enter higher guess: ";
-    cin >> High;
+    cin >> price;
     
     // tolerance
-    double Tolerance;
+    double tolerance;
     
     cout << "Enter tolerance: ";
-    cin >> Tolerance;
-    
-    // option
-    BSCall theCall(r, d, Expiry, Spot, Strike);
-    
-    // Bisection: implied volatility
-    double vol = Bisection(Price, Low, High, Tolerance, theCall);
-    
-    // compute the calibrated price
-    double PriceTwo = BlackScholesCall(Spot, Strike, r, d, vol, Expiry);
-    cout << endl << "Implied Volatility (Bisection): " << vol << ", Price: " << PriceTwo << endl;
+    cin >> tolerance;
 
-    // NewtonRaphson: implied volatility
-    double Start;
-    cout << "Enter start: ";
-    cin >> Start;
-    vol = NewtonRaphson<BSCall, &BSCall::operator(), &BSCall::Vega>(Price, Start, Tolerance, theCall);
-    
-    // compute the calibrated price
-    double PriceThree = BlackScholesCall(Spot, Strike, r, d, vol, Expiry);
-    cout << endl << "Implied Volatility (NewtonRaphson): " << vol << ", Price: " << PriceThree << endl;
+    // initial value
+    double init;
+    cout << "Enter init: ";
+    cin >> init;
+   
+    // find implied volatility
+    auto bsVol = [spot, strike, r, d, expiration](double vol) { return callPrice(spot, strike, r, d, vol, expiration); };
+    auto vega = [spot, strike, r, d, expiration](double vol) { return callVega(spot, strike, r, d, vol, expiration); };
+    double vol = newton(price, init, tolerance, bsVol, vega);
+
+    // compute the bs price using the solution volatility
+    double bsPrice = callPrice(spot, strike, r, d, vol, expiration);
+    cout << endl << "Implied Volatility (NewtonRaphson): " << vol << ", Price: " << bsPrice << endl;
     
     return 0;
 }
