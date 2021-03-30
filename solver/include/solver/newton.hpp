@@ -5,8 +5,8 @@
 
 const int MAX_ITER = 20;
 
-double newton(double target, double start, double tol, std::function<double(double)> f, std::function<double(double)> derivative) {
-    double y = f(start), sol = start;
+double newton(double target, double init, double tol, std::function<double(double)> f, std::function<double(double)> derivative) {
+    double y = f(init), sol = init;
     int i = 0;
 
     while (std::fabs(y - target) > tol) {

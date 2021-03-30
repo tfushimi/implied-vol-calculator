@@ -5,22 +5,22 @@
 using namespace std;
 using namespace boost::math;
 
-double callPrice(double Spot, double Strike, double r, double d, double Vol, double Expiry) {
-    double d1 = (log(Spot / Strike) + (r - d + 0.5 * Vol * Vol) * Expiry) / (Vol * sqrt(Expiry));
-    double d2 = d1 - Vol * sqrt(Expiry);
+double callPrice(double spot, double strike, double r, double d, double vol, double expiration) {
+    double d1 = (log(spot / strike) + (r - d + 0.5 * vol * vol) * expiration) / (vol * sqrt(expiration));
+    double d2 = d1 - vol * sqrt(expiration);
     normal norm;
-    return Spot * exp(-d*Expiry)* cdf(norm, d1) - Strike * exp(-r*Expiry) * cdf(norm, d2);
+    return spot * exp(-d*expiration)* cdf(norm, d1) - strike * exp(-r*expiration) * cdf(norm, d2);
 }
 
-double putPrice(double Spot, double Strike, double r, double d, double Vol, double Expiry) {
-    double d1 = (log(Spot / Strike) + (r - d + 0.5 * Vol * Vol) * Expiry) / (Vol * sqrt(Expiry));
-    double d2 = d1 - Vol * sqrt(Expiry);
+double putPrice(double spot, double strike, double r, double d, double vol, double expiration) {
+    double d1 = (log(spot / strike) + (r - d + 0.5 * vol * vol) * expiration) / (vol * sqrt(expiration));
+    double d2 = d1 - vol * sqrt(expiration);
     normal norm;
-    return Strike * exp(-r*Expiry) * cdf(norm, -d2) - Spot * exp(-d*Expiry)* cdf(norm, -d1);
+    return strike * exp(-r*expiration) * cdf(norm, -d2) - spot * exp(-d*expiration)* cdf(norm, -d1);
 }
 
-double callVega(double Spot, double Strike, double r, double d, double Vol, double Expiry) {
+double callVega(double spot, double strike, double r, double d, double vol, double expiration) {
     normal norm;
-    double d1 = (log(Spot / Strike) + (r - d + 0.5 * Vol * Vol) * Expiry) / (Vol * sqrt(Expiry));
-    return Spot * exp(-d*Expiry) * sqrt(Expiry) * cdf(norm, d1);
+    double d1 = (log(spot / strike) + (r - d + 0.5 * vol * vol) * expiration) / (vol * sqrt(expiration));
+    return spot * exp(-d*expiration) * sqrt(expiration) * cdf(norm, d1);
 }
